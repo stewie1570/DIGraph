@@ -19,8 +19,11 @@ var allInjectedDependencies = dllFiles
     .ToList();
 
 Console.WriteLine("Injected Dependencies Found:");
+Console.WriteLine("```mermaid");
+Console.WriteLine("flowchart TD");
 allInjectedDependencies
-    .Select(dep => $"{dep.ClassName} --> {dep.DependencyName}")
+    .Select(dep => $"  {dep.ClassName} --> {dep.DependencyName}")
     .Distinct()
     .ToList()
     .ForEach(Console.WriteLine);
+Console.WriteLine("```");
