@@ -2,6 +2,6 @@ namespace DIGraph.Models;
 
 public record InjectedDependency
 {
-    public string ClassName { get; set; }
-    public string DependencyName { get; set; }
+    public string? ClassName { get; set; }
+    public string? DependencyName { get; set; }
 }
