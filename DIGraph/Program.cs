@@ -1,6 +1,7 @@
 using System.IO;
 using System.Reflection;
 using DIGraph;
+using DIGraph.Models;
 
 var commandArgs = Environment.GetCommandLineArgs().ToList();
 var currentPath = Path.GetDirectoryName(commandArgs[0]) ?? "";
@@ -13,9 +14,18 @@ Console.WriteLine("Assemblies Found:");
 dllFiles.ForEach(Console.WriteLine);
 
 var allInjectedDependencies = dllFiles
-    .SelectMany(dllFile => Assembly
-        .LoadFile(dllFile)
-        .FindInjectedDependencyNames(namespacePrefix))
+    .SelectMany(dllFile =>
+    {
+        try{
+        return Assembly
+            .LoadFile(dllFile)
+            .FindInjectedDependencyNames(namespacePrefix);
+        }
+        catch(Exception ex){
+            Console.WriteLine($"Couldn't load: {dllFile}\n{ex.Message}\n\n");
+            return new List<InjectedDependency>();
+        }
+    })
     .ToList();
 var interfaces = allInjectedDependencies
     .GroupBy(dep => dep.DependencyName)
