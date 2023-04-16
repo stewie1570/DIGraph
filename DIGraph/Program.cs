@@ -1,4 +1,3 @@
-using System.IO;
 using System.Reflection;
 using DIGraph;
 using DIGraph.Models;
@@ -16,12 +15,13 @@ dllFiles.ForEach(Console.WriteLine);
 var allInjectedDependencies = dllFiles
     .SelectMany(dllFile =>
     {
-        try{
-        return Assembly
-            .LoadFile(dllFile)
-            .FindInjectedDependencyNames(namespacePrefix);
+        try
+        {
+            var assembly = Assembly.LoadFile(dllFile);
+            return assembly.FindInjectedDependencyNames(namespacePrefix);
         }
-        catch(Exception ex){
+        catch (Exception ex)
+        {
             Console.WriteLine($"Couldn't load: {dllFile}\n{ex.Message}\n\n");
             return new List<InjectedDependency>();
         }
