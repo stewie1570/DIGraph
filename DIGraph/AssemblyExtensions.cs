@@ -10,7 +10,7 @@ public static class AssemblyExtentions
         var allTypes = assembly.ExportedTypes;
 
         return allTypes
-            .Where(type => type.IsClass && (type.Namespace ?? "").StartsWith(withNameSpacingStartingWith))
+            .Where(type => (type.Namespace ?? "").StartsWith(withNameSpacingStartingWith) && type.IsClass)
             .SelectMany(theClass => theClass.GetConstructors().Select(constructor => new
             {
                 Constructor = constructor,
