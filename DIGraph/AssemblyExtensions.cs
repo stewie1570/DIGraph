@@ -7,8 +7,9 @@ public static class AssemblyExtentions
 {
     public static List<InjectedDependency> FindInjectedDependencyNames(this Assembly assembly, string withNameSpacingStartingWith = "")
     {
-        return assembly
-            .GetTypes()
+        var allTypes = assembly.GetTypes();
+
+        return allTypes
             .Where(type => type.IsClass && (type.Namespace ?? "").StartsWith(withNameSpacingStartingWith))
             .SelectMany(theClass => theClass.GetConstructors().Select(constructor => new
             {
@@ -18,7 +19,11 @@ public static class AssemblyExtentions
             .SelectMany(dep => dep.Constructor.GetParameters().Select(param => new InjectedDependency
             {
                 ClassName = dep.TheClass.GetDisplayName(),
-                DependencyName = param.ParameterType.GetDisplayName()
+                DependencyName = param.ParameterType.GetDisplayName(),
+                DependencySubTypes = allTypes
+                    .Where(type => type.IsClass && type.IsAssignableTo(param.ParameterType))
+                    .Select(type => type.GetDisplayName())
+                    .ToList()
             }))
             .ToList();
     }

@@ -7,6 +7,8 @@ namespace DIGraph.Tests;
 public interface IDoSomething { };
 public interface IDoSomethingElse { };
 
+public class DoSomethingStupid : IDoSomething { };
+
 public class TestComponent1
 {
     public TestComponent1(IDoSomething something, IDoSomethingElse somethingElse) { }
@@ -31,17 +33,26 @@ public class AssemblyExtensionsTests
                 new InjectedDependency
                 {
                     ClassName = "DIGraph.Tests.TestComponent1",
-                    DependencyName = "DIGraph.Tests.IDoSomething"
+                    DependencyName = "DIGraph.Tests.IDoSomething",
+                    DependencySubTypes = new List<string>
+                    {
+                        "DIGraph.Tests.DoSomethingStupid"
+                    }
                 },
                 new InjectedDependency
                 {
                     ClassName = "DIGraph.Tests.TestComponent1",
-                    DependencyName = "DIGraph.Tests.IDoSomethingElse"
+                    DependencyName = "DIGraph.Tests.IDoSomethingElse",
+                    DependencySubTypes = new List<string>()
                 },
                 new InjectedDependency
                 {
                     ClassName = "DIGraph.Tests.TestComponent2",
-                    DependencyName = "DIGraph.Tests.IDoSomething"
+                    DependencyName = "DIGraph.Tests.IDoSomething",
+                    DependencySubTypes = new List<string>
+                    {
+                        "DIGraph.Tests.DoSomethingStupid"
+                    }
                 }
             });
     }
