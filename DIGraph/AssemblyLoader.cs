@@ -25,7 +25,11 @@ public static class AssemblyLoader
 
     private static void LoadReferencedAssemblies(Assembly assembly, string fileName, string? directory)
     {
-        var filesInDirectory = Directory.GetFiles(directory ?? "").Where(x => x != fileName).Select(x => Path.GetFileNameWithoutExtension(x)).ToList();
+        var filesInDirectory = Directory
+            .GetFiles(directory ?? "")
+            .Where(file => file != fileName)
+            .Select(file => Path.GetFileNameWithoutExtension(file))
+            .ToList();
         var references = assembly.GetReferencedAssemblies();
 
         foreach (var reference in references)

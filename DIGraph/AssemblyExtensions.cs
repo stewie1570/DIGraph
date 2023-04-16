@@ -7,7 +7,7 @@ public static class AssemblyExtentions
 {
     public static List<InjectedDependency> FindInjectedDependencyNames(this Assembly assembly, string withNameSpacingStartingWith = "")
     {
-        var allTypes = assembly.GetTypes();
+        var allTypes = assembly.ExportedTypes;
 
         return allTypes
             .Where(type => type.IsClass && (type.Namespace ?? "").StartsWith(withNameSpacingStartingWith))

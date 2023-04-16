@@ -21,7 +21,7 @@ var allInjectedDependencies = dllFiles
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{dllFile} could not load.\n{ex.Message}\n\n");
+            Console.WriteLine($"{dllFile} could not load({ex.GetType().Name}).\n{ex.Message}\n{ex.StackTrace}\n\n");
             return new List<InjectedDependency>();
         }
     })
