@@ -12,20 +12,21 @@ Console.WriteLine("Assemblies Found:");
 dllFiles.ForEach(Console.WriteLine);
 
 var allInjectedDependencies = dllFiles
-    .SelectMany(dllFile =>
+    .Select(dllFile =>
     {
         try
         {
-            var assembly = AssemblyLoader.LoadFromAssemblyPath(dllFile);
-            return assembly?.FindInjectedDependencyNames(namespacePrefix) ?? new List<InjectedDependency>();
+            return AssemblyLoader.LoadFromAssemblyPath(dllFile);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"{dllFile} could not load({ex.GetType().Name}).\n{ex.Message}\n{ex.StackTrace}\n\n");
-            return new List<InjectedDependency>();
+            return null;
         }
     })
-    .ToList();
+    .Where(assembly => assembly != null)
+    .FindInjectedDependencyNames(namespacePrefix);
+
 var interfaces = allInjectedDependencies
     .GroupBy(dep => dep.DependencyName)
     .Select(group => group.First())

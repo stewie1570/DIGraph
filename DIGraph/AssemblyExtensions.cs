@@ -7,7 +7,25 @@ public static class AssemblyExtentions
 {
     public static List<InjectedDependency> FindInjectedDependencyNames(this Assembly assembly, string withNameSpacingStartingWith = "")
     {
-        var allTypes = assembly.ExportedTypes;
+        return new List<Assembly> { assembly }.FindInjectedDependencyNames(withNameSpacingStartingWith);
+    }
+
+    public static List<InjectedDependency> FindInjectedDependencyNames(this IEnumerable<Assembly?> assemblies, string withNameSpacingStartingWith = "")
+    {
+        var allTypes = assemblies
+            .SelectMany(assembly =>
+            {
+                try
+                {
+                    return assembly?.DefinedTypes ?? new List<TypeInfo>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{assembly?.FullName} could not load. ({ex.GetType()}\n{ex.StackTrace})");
+                    return new List<TypeInfo>();
+                }
+            })
+            .ToList();
 
         return allTypes
             .Where(type => (type.Namespace ?? "").StartsWith(withNameSpacingStartingWith) && type.IsClass)
