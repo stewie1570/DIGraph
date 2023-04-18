@@ -41,6 +41,7 @@ public static class AssemblyExtentions
                 DependencySubTypes = allTypes
                     .Where(type => type.IsClass && type.IsAssignableTo(param.ParameterType))
                     .Select(type => type.GetDisplayName())
+                    .Distinct()
                     .ToList()
             }))
             .ToList();
