@@ -21,7 +21,7 @@ public static class AssemblyExtentions
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{assembly?.FullName} could not load. ({ex.GetType()}\n{ex.Message}\n{ex.StackTrace})");
+                    Console.WriteLine($"ASSEMBLY: {assembly?.FullName} could not load. ({ex.GetType()}\n{ex.Message}\n{ex.StackTrace})");
                     return new List<TypeInfo>();
                 }
             })
