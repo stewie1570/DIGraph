@@ -25,7 +25,12 @@ var allInjectedDependencies = dllFiles
         }
     })
     .Where(assembly => assembly != null)
-    .FindInjectedDependencyNames(namespacePrefix);
+    .FindInjectedDependencyNames(namespacePrefix)
+    .Select(dependency => dependency with
+    {
+        DependencyName = (dependency?.DependencyName ?? "").Replace("[]", "Array")
+    })
+    .ToList();
 
 var interfaces = allInjectedDependencies
     .GroupBy(dep => dep.DependencyName)
@@ -34,7 +39,7 @@ var interfaces = allInjectedDependencies
 
 Console.WriteLine("Injected Dependencies Found:");
 Console.WriteLine("```mermaid");
-Console.WriteLine("flowchart TD");
+Console.WriteLine("flowchart LR");
 allInjectedDependencies
     .Select(dep => $"  {dep.ClassName} --> {dep.DependencyName}")
     .Distinct()
