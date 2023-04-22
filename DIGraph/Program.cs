@@ -1,5 +1,4 @@
 using DIGraph;
-using DIGraph.Models;
 
 var commandArgs = Environment.GetCommandLineArgs().ToList();
 var currentPath = Path.GetDirectoryName(commandArgs[0]) ?? "";
